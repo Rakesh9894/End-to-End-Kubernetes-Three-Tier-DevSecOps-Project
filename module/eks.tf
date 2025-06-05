@@ -37,7 +37,14 @@ resource "aws_eks_addon" "eks-addons" {
   for_each      = { for idx, addon in var.addons : idx => addon }
   cluster_name  = aws_eks_cluster.eks[0].name
   addon_name    = each.value.name
-  addon_version = each.value.version
+  
+  # Addon version only if it's provided (optional)
+  dynamic "addon_version" {
+    for_each = lookup(each.value, "version", "") != "" ? [each.value.version] : []
+    content {
+      addon_version = addon_version.value
+    }
+  }
 
   depends_on = [
     aws_eks_node_group.ondemand-node,
