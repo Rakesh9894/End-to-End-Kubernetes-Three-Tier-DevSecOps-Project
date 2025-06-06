@@ -20,7 +20,7 @@ eks-sg                = "eks-sg"
 # EKS
 is-eks-cluster-enabled     = true
 cluster-version            = "1.32"
-cluster-name               = "eks-cluster"
+cluster-name               = "dev-medium-eks-cluster"
 endpoint-private-access    = true
 endpoint-public-access     = false
 ondemand_instance_types    = ["t3a.medium"]
@@ -32,20 +32,8 @@ desired_capacity_spot      = "1"
 min_capacity_spot          = "1"
 max_capacity_spot          = "10"
 addons = [
-  {
-    name    = "vpc-cni",
-    version = "v1.18.3-eksbuild.2" # Updated to a compatible version for 1.32
-  },
-  {
-    name    = "coredns",
-    version = "v1.11.3-eksbuild.1" # Corrected version for Kubernetes 1.32
-  },
-  {
-    name    = "kube-proxy",
-    version = "v1.32.0-eksbuild.2" # Updated to match Kubernetes 1.32
-  },
-  {
-    name    = "aws-ebs-csi-driver",
-    version = "v1.38.1-eksbuild.1" # Compatible with 1.32
-  }
+  { name = "vpc-cni" },
+  { name = "coredns" },
+  { name = "kube-proxy" },
+  { name = "aws-ebs-csi-driver" }
 ]
