@@ -5,7 +5,7 @@ resource "aws_eks_cluster" "eks" {
   version  = var.cluster-version
 
   vpc_config {
-    subnet_ids              = [
+    subnet_ids = [
       aws_subnet.private-subnet[0].id,
       aws_subnet.private-subnet[1].id,
       aws_subnet.private-subnet[2].id
@@ -33,12 +33,20 @@ resource "aws_iam_openid_connect_provider" "eks-oidc" {
   url             = data.tls_certificate.eks-certificate.url
 }
 
-# EKS Add-ons (FIXED BLOCK)
+# Data source for add-on versions
+data "aws_eks_addon_version" "addons" {
+  for_each           = { for addon in var.addons : addon.name => addon }
+  addon_name         = each.value.name
+  kubernetes_version = var.cluster-version
+  most_recent        = true
+}
+
+# EKS Add-ons
 resource "aws_eks_addon" "eks-addons" {
   for_each                   = { for idx, addon in var.addons : idx => addon }
   cluster_name               = aws_eks_cluster.eks[0].name
   addon_name                 = each.value.name
-  addon_version              = try(each.value.version, null)
+  addon_version              = data.aws_eks_addon_version.addons[each.value.name].version
   service_account_role_arn   = try(each.value.service_account_role_arn, null)
 
   depends_on = [
@@ -59,7 +67,7 @@ resource "aws_eks_node_group" "ondemand-node" {
     max_size     = var.max_capacity_on_demand
   }
 
-  subnet_ids     = [
+  subnet_ids = [
     aws_subnet.private-subnet[0].id,
     aws_subnet.private-subnet[1].id,
     aws_subnet.private-subnet[2].id
@@ -95,7 +103,7 @@ resource "aws_eks_node_group" "spot-node" {
     max_size     = var.max_capacity_spot
   }
 
-  subnet_ids     = [
+  subnet_ids = [
     aws_subnet.private-subnet[0].id,
     aws_subnet.private-subnet[1].id,
     aws_subnet.private-subnet[2].id
