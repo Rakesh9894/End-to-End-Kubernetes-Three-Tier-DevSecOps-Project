@@ -38,13 +38,14 @@ resource "aws_eks_addon" "eks-addons" {
   cluster_name  = aws_eks_cluster.eks[0].name
   addon_name    = each.value.name
   
-  # Addon version only if it's provided (optional)
-  dynamic "addon_version" {
-    for_each = lookup(each.value, "version", "") != "" ? [each.value.version] : []
-    content {
-      addon_version = addon_version.value
-    }
-  }
+ resource "aws_eks_addon" "eks-addons" {
+  cluster_name = aws_eks_cluster.eks.name
+  addon_name   = var.addon_name
+  service_account_role_arn = aws_iam_role.addon_role.arn
+
+  # Set addon_version only if var.enable_addon_version is true
+  addon_version = var.enable_addon_version ? var.addon_version : null
+}
 
   depends_on = [
     aws_eks_node_group.ondemand-node,
