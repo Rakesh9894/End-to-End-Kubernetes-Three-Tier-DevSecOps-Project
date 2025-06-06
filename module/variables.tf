@@ -43,6 +43,7 @@ variable "addons" {
     name    = string
     version = string
   }))
+
 }
 variable "ondemand_instance_types" {}
 variable "spot_instance_types" {}
