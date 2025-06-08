@@ -1,13 +1,13 @@
 pipeline {
     agent any 
     tools {
-        jdk 'jdk'
+       
         nodejs 'nodejs'
     }
     environment  {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
-        AWS_ECR_REPO_NAME = credentials('ECR_REPO1')
+        AWS_ECR_REPO_NAME = 'frontend'
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
     }
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/Rakesh9894/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git branch: 'main', credentialsId: 'GITHUB', url: 'https://github.com/Rakesh9894/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
             }
         }
         stage('Sonarqube Analysis') {
@@ -82,7 +82,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/Rakesh9894/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git branch: 'main', credentialsId: 'GITHUB', url: 'https://github.com/Rakesh9894/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
             }
         }
         stage('Update Deployment file') {
@@ -103,7 +103,7 @@ pipeline {
                             sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
                             git add deployment.yaml
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
                     }
                 }
