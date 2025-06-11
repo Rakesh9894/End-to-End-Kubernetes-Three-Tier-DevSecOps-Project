@@ -6,14 +6,21 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    # alb.ingress.kubernetes.io/subnets: "subnet-0aa439b4ddafcca10,subnet-0b95df318219145ca,subnet-0ccca36474902829a"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/subnets: subnet-0cab625e99c0693bd,subnet-0789d4cfddd56b029
 spec:
   ingressClassName: alb
   rules:
     - host: rakesh9894.com
       http:
         paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000
           - path: /api
             pathType: Prefix
             backend:
@@ -22,30 +29,23 @@ spec:
                 port:
                   number: 3500
           - path: /healthz
-            pathType: Exact
+            pathType: Prefix
             backend:
               service:
                 name: api
                 port:
                   number: 3500
           - path: /ready
-            pathType: Exact
+            pathType: Prefix
             backend:
               service:
                 name: api
                 port:
                   number: 3500
           - path: /started
-            pathType: Exact
+            pathType: Prefix
             backend:
               service:
                 name: api
                 port:
                   number: 3500
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 3000
