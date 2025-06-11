@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: rakesh9894
+    - host: rakesh9894.com
       http:
         paths:
           - path: /api
