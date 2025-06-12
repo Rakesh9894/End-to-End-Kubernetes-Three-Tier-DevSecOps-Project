@@ -4,47 +4,26 @@ metadata:
   name: mainlb
   namespace: three-tier
   annotations:
+    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-    alb.ingress.kubernetes.io/subnets: subnet-0cab625e99c0693bd,subnet-0789d4cfddd56b029
+    alb.ingress.kubernetes.io/subnets: subnet-01a3f1ecf288ec60e,subnet-07daca48954af020e
 spec:
-  ingressClassName: alb
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: frontend
+                name: frontend-service
                 port:
                   number: 3000
-          - path: /api
-            pathType: Prefix
+          - path: /api/*
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: api
-                port:
-                  number: 3500
-          - path: /healthz
-            pathType: Prefix
-            backend:
-              service:
-                name: api
-                port:
-                  number: 3500
-          - path: /ready
-            pathType: Prefix
-            backend:
-              service:
-                name: api
-                port:
-                  number: 3500
-          - path: /started
-            pathType: Prefix
-            backend:
-              service:
-                name: api
+                name: api-service
                 port:
                   number: 3500
