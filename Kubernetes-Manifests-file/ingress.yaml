@@ -7,8 +7,8 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/security-groups: "sg-0e2dcb06b9a4c7bd8"
-    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"  # Let AWS manage backend rules
-    alb.ingress.kubernetes.io/subnets: "subnet-01a3f1ecf288ec60e,subnet-07daca48954af020e"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "false"
+    alb.ingress.kubernetes.io/vpc-id: "vpc-0455cf06059c8be67"
     alb.ingress.kubernetes.io/load-balancer-type: "nlb"
 spec:
   rules:
@@ -25,6 +25,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: api-service
+                name: api
                 port:
                   number: 3500
