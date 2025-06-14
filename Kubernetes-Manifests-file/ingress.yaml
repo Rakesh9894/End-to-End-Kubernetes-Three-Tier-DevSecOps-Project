@@ -6,10 +6,8 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/security-groups: "sg-0e2dcb06b9a4c7bd8"
-    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "false"
-    alb.ingress.kubernetes.io/vpc-id: "vpc-0455cf06059c8be67"
     alb.ingress.kubernetes.io/load-balancer-type: "nlb"
+    alb.ingress.kubernetes.io/vpc-id: "vpc-0455cf06059c8be67"
 spec:
   rules:
     - http:
