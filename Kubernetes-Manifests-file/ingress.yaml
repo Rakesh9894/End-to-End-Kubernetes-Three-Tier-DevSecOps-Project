@@ -4,11 +4,12 @@ metadata:
   name: mainlb
   namespace: three-tier
   annotations:
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: subnet-01a3f1ecf288ec60e,subnet-07daca48954af020e
+    alb.ingress.kubernetes.io/security-groups: "sg-0e2dcb06b9a4c7bd8"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"  # Let AWS manage backend rules
+    alb.ingress.kubernetes.io/subnets: "subnet-01a3f1ecf288ec60e,subnet-07daca48954af020e"
+    alb.ingress.kubernetes.io/load-balancer-type: "nlb"
 spec:
   rules:
     - http:
