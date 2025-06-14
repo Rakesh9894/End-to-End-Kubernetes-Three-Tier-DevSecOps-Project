@@ -6,7 +6,6 @@ metadata:
   labels:
     role: frontend
     env: demo
-
 spec: 
   replicas: 1
   strategy:
